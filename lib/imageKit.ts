@@ -12,3 +12,22 @@ function getImageKit(): ImageKit {
 
   return imageKitClient;
 }
+
+export async function uploadSlideImage(
+  buffer: Buffer,
+  fileName: string,
+): Promise<string> {
+  const client = getImageKit();
+
+  const response = await client.files.upload({
+    file: await toFile(buffer, fileName),
+    fileName,
+    folder: "/pitch-deck",
+  });
+
+  if (!response.url) {
+    throw new Error("Failed to upload slide image");
+  }
+
+  return response.url;
+}
