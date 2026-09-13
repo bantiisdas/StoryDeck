@@ -50,11 +50,11 @@ export const generateDeck = inngest.createFunction(
 
         const imageUrl = await step.run(`image-${order}`, async () => {
           const imageBuffer = await generateSlideImage(slide.imagePrompt);
-          const fileName = `deck-${deckId}-slide-${order}`;
+          const fileName = `deck-${deckId}-slide-${order}.png`;
           return uploadSlideImage(imageBuffer, fileName);
         });
 
-        await step.run("save-slide", async () => {
+        await step.run(`save-slide-${order}`, async () => {
           await prisma.slide.create({
             data: {
               deckId,
@@ -87,7 +87,7 @@ export const generateDeck = inngest.createFunction(
       await step.run("mark-failed", async () => {
         await prisma.deck.update({
           where: { id: deckId },
-          data: { status: DECKSTATUS.FAILED },
+          data: { status: DECKSTATUS.FAILED, errorMessage: message },
         });
       });
 

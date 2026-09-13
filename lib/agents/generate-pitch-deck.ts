@@ -44,7 +44,7 @@ export async function generatePitchDeck(idea: string): Promise<PitchDeck> {
   const trimmedIdea = idea.trim();
   try {
     const agentResult = await run(pitchDeckAgent, trimmedIdea);
-    return parseRawoutput(agentResult);
+    return parseRawoutput(agentResult.finalOutput);
   } catch (error) {
     if (isGuardrailError(error)) {
       const reason = getGuardrailReason(error);
