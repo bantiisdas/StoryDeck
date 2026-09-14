@@ -20,10 +20,10 @@ enum DECKSTATUS {
 }
 
 model Deck{
-  id  String  @id @default(uuid())
+  id  String  @id @default(cuid())
   idea  String  @db.Text
   title String?
-  status  DECKSTATUS  @default(GENERATING)
+  status  DECKSTATUS  @default(PENDING)
   errorMessage  String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
