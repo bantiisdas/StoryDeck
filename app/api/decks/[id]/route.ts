@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 type RouteParams = {
   params: Promise<{ id: string }>;
 };
@@ -17,5 +19,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     return NextResponse.json({ error: "Deck not found" }, { status: 404 });
   }
 
-  return NextResponse.json(deck);
+  return NextResponse.json(deck, {
+    headers: { "Cache-Control": "no-store" },
+  });
 }

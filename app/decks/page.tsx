@@ -17,8 +17,13 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { prisma } from "@/lib/db";
+import { connection } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 export default async function DecksPage() {
+  await connection();
+
   const decks = await prisma.deck.findMany({
     orderBy: { createdAt: "desc" },
     include: {

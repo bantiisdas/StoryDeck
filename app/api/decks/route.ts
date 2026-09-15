@@ -1,8 +1,11 @@
 import { DECKSTATUS } from "@/app/generated/prisma/enums";
 import { inngest } from "@/inngest/client";
 import { prisma } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+
+export const dynamic = "force-dynamic";
 
 const createDeckSchema = z.object({
   idea: z
@@ -31,6 +34,7 @@ export async function GET() {
       createdAt: deck.createdAt,
       updatedAt: deck.updatedAt,
     })),
+    { headers: { "Cache-Control": "no-store" } },
   );
 }
 
@@ -71,6 +75,8 @@ export async function POST(request: Request) {
       { status: 502 },
     );
   }
+
+  revalidatePath("/decks");
 
   return NextResponse.json(
     { id: deck.id, status: deck.status },

@@ -34,6 +34,7 @@ export function CreateDeckForm() {
         return;
       }
 
+      router.refresh();
       router.push(`/decks/${data.id}`);
     } catch {
       setError("Could not reach the server. Is the app running?");
